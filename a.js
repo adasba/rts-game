@@ -6,7 +6,6 @@ const TAU = Math.PI * 2;
 //gameUtil.js
 var gameUtil = {
     pointTo: function(obj, target) {
-	
         return Math.atan2(target.y - obj.y, target.x - obj.x);
     },
     dist: function(x1, y1, x2, y2) {
@@ -15,39 +14,38 @@ var gameUtil = {
     distTo: function(obj, target) {
         return gameUtil.dist(obj.x, obj.y, target.x, target.y);
     },
-    nearest: function(obj, all) {
+    nearest: function(obj, all, filter) {
         var minDist = Infinity;
         var minDistIndex = 0;
         for (var i = 0; all.length > i; i++) {
             var e = all[i];
 			var dist = gameUtil.distTo(obj, e);
 			
-            if (dist < minDist && dist != 0) {
-                minDist = e;
+            if (dist < minDist && dist != 0 && filter(e)) {
+                minDist = dist;
                 minDistIndex = i;
             }
         }
-		
         return all[minDistIndex];
     },
     moveTo: function(obj, target) {
-	
         var dir = gameUtil.pointTo(obj, target);
 		obj.direction = dir;
-        if (gameUtil.distTo(obj, target) > obj.moveTo.range) {
+        var dist = gameUtil.distTo(obj, target);
+        if (dist > obj.moveTo.range) {
             obj.dx += obj.moveTo.vel * Math.cos(dir);
             obj.dy += obj.moveTo.vel * Math.sin(dir);
-        } else {
+        } else if (dist < obj.moveTo.range - 10) {
             obj.dx -= obj.moveTo.vel * Math.cos(dir);
             obj.dy -= obj.moveTo.vel * Math.sin(dir);
         }
-		
     },
     applyPhysics: function(obj) {
         obj.x += obj.dx;
         obj.y += obj.dy;
         obj.dx *= obj.drag;
         obj.dy *= obj.drag;
+        obj.direction = Math.atan2(obj.dy, obj.dx);
     },
     circle: function(ctx, obj) {
         ctx.beginPath();
@@ -80,7 +78,6 @@ var gameUtil = {
             gameUtil[e.type](ctx, e);
         }
         ctx.restore();
-		
     },
     colorScheme: {
         fill: "#EEEEEE",
@@ -93,10 +90,12 @@ var gameUtil = {
 };
 
 var rtsGame = {
-    gameObject: function(obj, args) {
-        obj.x = args[0];
-        obj.y = args[1];
-        obj.team = args[2];
+    gameObject: function(type, x, y, team) {
+        var obj = {};
+        obj.type = type;
+        obj.x = x;
+        obj.y = y;
+        obj.team = team;
         obj.dx = 0;
         obj.dy = 0;
         obj.direction = 0;
@@ -108,6 +107,7 @@ var rtsGame = {
         obj.hp = obj.maxPp;
         obj.energy = 0;
         obj.drag = obj.drag || 0.95;
+        return obj;
     }
 }
 
@@ -139,7 +139,7 @@ var gameObjectParams = {
         maxHP: 100,
         fireDelay: 40,
         updateFunction: function(others) {
-            gameUtil.moveTo(this, gameUtil.nearest(this, others));
+            gameUtil.moveTo(this, gameUtil.nearest(this, others, e => { return this.team != e.team }));
 			gameUtil.applyPhysics(this);
         },
         moveTo: {
@@ -149,35 +149,25 @@ var gameObjectParams = {
     }
 }
 
-
-
-//gameObjects.js
-var gameObjects = {
-    SimpleSpaceship: function(x, y, team) {
-        this.type = "SimpleSpaceship";
-        rtsGame.gameObject(this, arguments);
-    }
-};
-
-
 var c = document.getElementById("canvas");
 var canvasContext = c.getContext("2d");
 
 //loop.js
 var o = [];
 for (var i = 0; 10 > i; i++) {
-    o.push(new gameObjects.SimpleSpaceship(Math.random() * 200, Math.random() * 200));
+    o.push(rtsGame.gameObject("SimpleSpaceship", Math.random() * 100 + Math.floor(i / 5) * 300, Math.random() * 400, Math.floor(Math.random() * 2)));
 }
 
 function loop() {
     gameUtil.setColors(canvasContext);
+
+    canvasContext.clearRect(0, 0, c.width, c.height);
 
     for (var i = 0; o.length > i; i++) {
         o[i].updateFunction(o);
         gameUtil.draw(canvasContext, o[i]);
 
     }
-
 
     requestAnimationFrame(loop);
 }
