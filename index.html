@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
-    <head></head>
+    <head>
+        <link href="style.css" rel="stylesheet" type="text/css">
+    </head>
     <body>
-        <canvas width=512 height=512 id=canvas></canvas>
-        <script src="a.js"></script>
+        <canvas width=512 height=512 id=canvas oncontextmenu="return false;"></canvas>
+        <script src="server/initServer.js"></script>
+        <script src="server/serverUtil.js"></script>
+        <script src="server/gameObjectData.js"></script>
+        <script src="server/gameLoop.js"></script>
+
+        <script src="client/initClient.js"></script>
+        <script src="client/clientUtil.js"></script>
+        <script src="client/draw.js"></script>
+        <script src="client/gameObjectDisplay.js"></script>
+
+        <script src="server/serverToClient.js"></script>
+        <script src="client/clientToServer.js"></script>
+        
+        <script src="server/createServer.js"></script>
+        <script src="client/clientLoop.js"></script>
     </body>
 </html>
