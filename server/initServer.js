@@ -24,7 +24,7 @@ function GameRoom() {
     this.updatePlayers = function () {
         for (var i = 0; this.incomingData.length > i; i++) {
             if (this.players[i] && this.uuidPresent(this.incomingData[i].uuid)) {
-                this.incomingData[i] = this.players[i];
+                this.players[i] = this.incomingData[i];
                 this.incomingData.splice(i, 1);
                 i--;
             } else {

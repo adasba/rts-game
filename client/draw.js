@@ -18,7 +18,7 @@ var drawUtils = {
             ctx.lineTo(e.x, e.y);
         }
         ctx.closePath();
-        ctx.fill();
+        if (!obj.empty) ctx.fill();
         ctx.stroke();
     },
     drawFunc: function (ctx, obj) {

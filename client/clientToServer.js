@@ -1,7 +1,3 @@
-function clientToServer(transform, inputs) {
-    var data = {
-        transform: transform,
-        inputs: inputs
-    };
+function clientToServer(data) {
     gameRoom.incomingData.push(data);
 }

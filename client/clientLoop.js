@@ -80,12 +80,12 @@ function clientLoop() {
             x: pos.x,
             y: pos.y,
             w: window.innerWidth / scale.factor,
-            h: window.innerHeight / scale.factor
-        },
-        {
+            h: window.innerHeight / scale.factor,
             orders: player.orders
         }
     );
+
+    player.orders = [];
 
     requestAnimationFrame(clientLoop);
 }

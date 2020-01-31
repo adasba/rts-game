@@ -53,6 +53,9 @@ function PlayerClient(team, uuid) {
         if (k.kd[" "]) {
             this.moveOrder(m.tx, m.ty);
         }
+        if (k.kd["x"]) {
+            this.stopOrder();
+        }
     }
     this.mouseSelect = function (all, m, k) {
         if (m.m[0]) {
@@ -85,7 +88,13 @@ function PlayerClient(team, uuid) {
     this.moveOrder = function (x, y) {
         for (var i = 0; this.selected.length > i; i++) {
             var e = this.selected[i];
-            this.orders.push({ id: e.id, x: x, y: y });
+            this.orders.push({ id: e.id, x: x, y: y, type: "move" });
+        }
+    }
+    this.stopOrder = function () {
+        for (var i = 0; this.selected.length > i; i++) {
+            var e = this.selected[i];
+            this.orders.push({ id: e.id, type: "stop" });
         }
     }
 }

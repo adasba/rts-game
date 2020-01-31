@@ -220,14 +220,60 @@ var rtsGame = {
         }
         return obj.x > x && obj.x < x + w && obj.y > y && obj.y < y + h;
     },
+    regPolygon: function (size, sides, xOffset, yOffset, angleOffset) {
+        var poly = [];
+        for (var i = 0; sides > i; i++) {
+            var dir = i / sides * TAU + angleOffset;
+            poly.push({
+                x: Math.cos(dir) * size + xOffset,
+                y: Math.sin(dir) * size + yOffset
+            });
+        }
+        return poly;
+    },
     orderCondition: function (obj, moveFunc) {
         if (obj.orders.length > 0) {
-            this.moveToPoint(obj, obj.orders[0]);
-            if (this.dist(obj.x, obj.y, obj.orders[0].x, obj.orders[0].y) < obj.collide.rad * 2) {
-                obj.orders.splice(0, 1);
+            var e = obj.orders[0];
+            if (e.type == "move") {
+                this.moveToPoint(obj, e);
+                obj.variableDraw.strokes.push({
+                    color: "overlay",
+                    type: "path",
+                    pts: [
+                        {
+                            x: obj.x,
+                            y: obj.y,
+                        }, 
+                        {
+                            x: e.x,
+                            y: e.y
+                        }
+                    ]
+                });
+                if (this.dist(obj.x, obj.y, e.x, e.y) < obj.collide.rad * 8) {
+                    obj.orders.splice(0, 1);
+                }
+            } else if (e.type == "stop") {
+                obj.variableDraw.strokes.push({
+                    color: "overlay",
+                    type: "path",
+                    empty: true,
+                    pts: this.regPolygon(obj.collide.rad * 3.5, 8, obj.x, obj.y, TAU / 16)
+                });
+                if (obj.orders.length > 1) {
+                    obj.orders.splice(0, 1);
+                }
             }
         } else {
             moveFunc();
+        }
+    },
+    clearVariableDraw: function (obj) {
+        for (var i = 0; obj.variableDraw.strokes.length > i; i++) {
+            var e = obj.variableDraw.strokes[i];
+            if (e.source != "custom") {
+                obj.variableDraw.strokes.splice(i, 1);
+            }
         }
     }
 }

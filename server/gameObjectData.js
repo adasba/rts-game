@@ -4,6 +4,7 @@ var gameObjectParams = {
         this.maxEnergy = 600;
         this.maxHP = 100;
         this.updateFunction = function(room) {
+            rtsGame.clearVariableDraw(this);
         	rtsGame.useEnergy(this);
             var nearestEnemy = rtsGame.handleTargeting(this, room.o);//rtsGame.nearestEnemy(this, room.o);
             if (this.energy != 0) {
@@ -14,7 +15,7 @@ var gameObjectParams = {
             rtsGame.simpleFireBehavior(this, nearestEnemy, room);
 
             rtsGame.collideSpaceship(this, room.o);
-			rtsGame.applyPhysics(this);
+            rtsGame.applyPhysics(this);
         }
         this.moveTo = {
             range: 120,
@@ -37,6 +38,9 @@ var gameObjectParams = {
         this.useEnergy = {
         	passive: 0.4
         }
+        this.variableDraw = {
+            strokes: []
+        }
     },
     EnergySpaceship: function () {
         this.category = "Charge";
@@ -44,7 +48,7 @@ var gameObjectParams = {
         this.maxHP = 150;
         this.localTime = 0;
         this.updateFunction = function (room) {
-            this.variableDraw.strokes = [];
+            rtsGame.clearVariableDraw(this);
             this.localTime++;
             var nearestAlly = rtsGame.nearestAlly(this, room.o.filter(e => { return e.category != "Charge"; }), Infinity);
             rtsGame.useEnergy(this);
@@ -53,7 +57,9 @@ var gameObjectParams = {
             } else {
                 this.moveTo.vel = 0.1;
             }
-            rtsGame.moveTo(this, nearestAlly);
+            rtsGame.orderCondition(this, () => {
+                rtsGame.moveTo(this, nearestAlly);
+            });
 
             rtsGame.collideSpaceship(this, room.o);
 

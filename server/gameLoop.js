@@ -2,6 +2,21 @@ function gameLoop(room) {
     //console.log(room.o.length);
     var len =  room.o.length;
 
+    for (var i = 0; room.players.length > i; i++) {
+        for (var j = 0; room.players[i].orders.length > j; j++) {
+            var e = room.players[i].orders[j];
+            var obj = false;
+            for (var k = 0; len > k; k++) {
+                obj = room.o[k];
+                if (e.id == obj.id) {
+                    obj.orders.push(e);
+                    k = len + 1;
+                }
+            }
+        }
+        room.players[i].orders = [];
+    }
+
     for (var i = 0; len > i; i++) {
         room.o[i].updateFunction(room);
     }
