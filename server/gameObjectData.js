@@ -131,11 +131,7 @@ var gameObjectParams = {
         this.maxEnergy = -15;
         this.maxHP = 0.00001;
         this.updateFunction = function(room) {
-        
-            //canvasContext.strokeText("im here", 40, 40);
             rtsGame.applyPhysics(this);
-            //rtsGame.moveTo(this, this.intendedTarget);
-                //this.intendedTarget = rtsGame.nearest(this, room.o, e => { return rtsGame.isAlly(this, e) && e.maxEnergy - e.energy > 50 && e.category == "Combat" });
             this.intendedTarget = rtsGame.min(this, room.o, "energy", (obj, current) => { return rtsGame.chainedCondition(obj, current, "isAlly", "needsEnergy", "combatTarget") && rtsGame.inRange(this, current, 300) });
             if (this.intendedTarget.didThisReturnNothing) {
                 this.intendedTarget = this.sender;
@@ -187,6 +183,40 @@ var gameObjectParams = {
         }
         this.useEnergy = {
         	passive: 0.2
+        }
+    },
+    EnergyTower: function () {
+        this.category = "Charge";
+        this.maxEnergy = 10000;
+        this.maxHP = 400;
+        this.updateFunction = function (room) {
+            
+            rtsGame.clearVariableDraw(this);
+            rtsGame.useEnergy(this);
+            var alliesToPower = room.o.filter(e => { return rtsGame.chainedCondition(this, e, "isAlly", "needsEnergy", "combatTarget") && rtsGame.inRange(this, e, 720) && e.category != "Charge" });
+            for (var i = 0; alliesToPower.length > i; i++) {
+                if (this.energy > 1) {
+                    alliesToPower[i].energy += 1;
+                    this.energy -= 1;
+                    this.variableDraw.strokes.push({
+                        type: "path",
+                        color: "energy",
+                        pts: [
+                            this,
+                            alliesToPower[i]
+                        ]
+                    });
+                }
+            }
+        }
+        this.collide = {
+        	rad: 12
+        };
+        this.draw = {
+        	layer: 2
+        }
+        this.useEnergy = {
+        	passive: -5
         }
     },
     Asteroid: function () {

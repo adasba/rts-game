@@ -17,6 +17,10 @@ var gameRoom = new GameRoom();
         o[o.length - 1].targeting = "weakestEnergy";
     }
     for (var i = 0; 9 > i; i++) {
+        rtsGame.createGameObject(gameRoom, "EnergyTower", Math.random() * 2000, Math.random() * 1000 + 1500, 2);
+        o[o.length - 1].targeting = "weakestEnergy";
+    }
+    for (var i = 0; 9 > i; i++) {
         rtsGame.createGameObject(gameRoom, "EnergySpaceship", Math.random() * 400, Math.random() * 400, 1);
         o[o.length - 1].targeting = "weakestEnergy";
     }

@@ -86,6 +86,43 @@ var draws = {
             r: 13
         }
     ],
+    EnergyTower: [
+        {
+            type: "circle",
+            x: 0,
+            y: 0,
+            r: 13
+        },
+        {
+            type: "path",
+            pts: [
+                {
+                    x: -2,
+                    y: -9
+                },
+                {
+                    x: 0,
+                    y: -3
+                },                
+                {
+                    x: -6,
+                    y: -1
+                },
+                {
+                    x: 2,
+                    y: 9
+                },
+                {
+                    x: 0,
+                    y: 3
+                },
+                {
+                    x: 6,
+                    y: 1
+                }
+            ]
+        }
+    ]
     // Asteroid: [
     // 	{
     //     	type: "drawFunc",
