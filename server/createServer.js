@@ -1,7 +1,7 @@
 
 var gameRoom = new GameRoom();
 
-(function () {
+setTimeout(function () {
     var o = gameRoom.o;
 
     for (var i = 0; 144 > i; i++) {
@@ -20,6 +20,9 @@ var gameRoom = new GameRoom();
         rtsGame.createGameObject(gameRoom, "EnergyTower", Math.random() * 2000, Math.random() * 1000 + 1500, 2);
         o[o.length - 1].targeting = "weakestEnergy";
     }
+    for (var i = 0; 4 > i; i++) {
+        rtsGame.createGameObject(gameRoom, "ControlTower", Math.random() * 2000, Math.random() * 1000 + 1500, 2);
+    }
     for (var i = 0; 9 > i; i++) {
         rtsGame.createGameObject(gameRoom, "EnergySpaceship", Math.random() * 400, Math.random() * 400, 1);
         o[o.length - 1].targeting = "weakestEnergy";
@@ -28,7 +31,7 @@ var gameRoom = new GameRoom();
     // for (var i = 0; 5 > i; i++) {
     //     rtsGame.createGameObject("Asteroid",  Math.random() * 2000, Math.random() * 1000 + 3000, 1));
     // }
-})();
+}, 500);
 
 function roomLoop() {
     

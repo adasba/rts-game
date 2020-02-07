@@ -68,10 +68,22 @@ var rtsGame = {
         obj.orders = [];
         return obj;
     },
+    getPlayerFromTeam: function (players, team) {
+        for (var i = 0; players.length > i; i++) {
+            if (players[i].team == team) {
+                return players[i];
+            }
+        }
+    },
     createGameObject: function (room, type, x, y, team, dx, dy) {
         room.o.push(this.gameObject(type, x, y, team, dx, dy));
         room.o[room.o.length - 1].id = room.currentID;
         room.currentID++;
+        if (type == "ControlTower") {
+            var p = this.getPlayerFromTeam(room.serverPlayerData, team);
+            room.o[room.o.length - 1].controlTowerID = p.controlTowerCount;
+            p.controlTowerCount++;
+        }
     },
     fireProj: function(projName, obj, target, velocity, room) {
         var all = room.o;
@@ -275,5 +287,6 @@ var rtsGame = {
                 obj.variableDraw.strokes.splice(i, 1);
             }
         }
-    }
+    },
+    clientSafePropList: ["targeting"]
 }

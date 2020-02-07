@@ -1,14 +1,14 @@
 
 
 
-var player = new PlayerClient(2, "singleplayer");
+var playerClient = new PlayerClient(2, "singleplayer");
 
 
 
 function clientLoop() {
     var o = allClientData.objects;
 
-    player.mouseSelect(o, mouse, keys);
+    playerClient.mouseSelect(o, mouse, keys);
 
     //handle scaling
     scale.factor = Math.pow(2, scale.log);
@@ -66,7 +66,7 @@ function clientLoop() {
         }
         currentLayer++;
     }
-    player.displaySelection(canvasContext);
+    playerClient.displaySelection(canvasContext);
     canvasContext.strokeStyle = drawUtils.colorScheme.overlay;
 
     canvasContext.restore();
@@ -81,11 +81,12 @@ function clientLoop() {
             y: pos.y,
             w: window.innerWidth / scale.factor,
             h: window.innerHeight / scale.factor,
-            orders: player.orders
+            orders: playerClient.orders,
+            team: playerClient.team
         }
     );
 
-    player.orders = [];
+    playerClient.orders = [];
 
     requestAnimationFrame(clientLoop);
 }

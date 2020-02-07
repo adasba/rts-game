@@ -83,7 +83,22 @@ function PlayerClient(team, uuid) {
                 }
             }
         }
+        this.initSelectGUI(selectGUIs, document.getElementById("select-gui-container"));
         this.handleOrders(all, m, k);
+    }
+    this.initSelectGUI = function (guis, elem) {
+        var categories = [];
+        for (var i = 0; this.selected.length > i; i++) {
+            var e = this.selected[i];
+            if (categories.indexOf(e.category) == -1) {
+                categories.push(e.category);
+            }
+        }
+        elem.innerHTML = "";
+        for (var i = 0; categories.length > i; i++) {
+            elem.innerHTML += guis[categories[i]].html;
+            guis[categories[i]].initFunc(this);
+        }
     }
     this.moveOrder = function (x, y) {
         for (var i = 0; this.selected.length > i; i++) {
@@ -97,12 +112,20 @@ function PlayerClient(team, uuid) {
             this.orders.push({ id: e.id, type: "stop" });
         }
     }
+    this.changeProperty = function (property, value, discrim) {
+        for (var i = 0; this.selected.length > i; i++) {
+            var e = this.selected[i];
+            if (discrim(e)) {
+                this.orders.push({ id: e.id, type: "changeProperty", prop: property, value: value });
+            }
+        }
+    }
 }
 
 c.width = window.innerWidth;
 c.height = window.innerHeight;
 
-document.addEventListener("resize", function (e) {
+window.addEventListener("resize", function (e) {
     c.width = window.innerWidth;
     c.height = window.innerHeight;
 });
@@ -131,7 +154,7 @@ var scale = {
 }
 
 //mouse move listener
-document.addEventListener("mousemove", function(e) {
+c.addEventListener("mousemove", function(e) {
     mouse.px = mouse.x;
     mouse.py = mouse.y;
     mouse.x = e.clientX;
@@ -144,11 +167,11 @@ document.addEventListener("mousemove", function(e) {
     }
 }, false);
 
-document.addEventListener("mousedown", function(e) {
+c.addEventListener("mousedown", function(e) {
     mouse.m[e.which - 1] = true;
     mouse.md[e.which - 1] = true;
 }, false);
-document.addEventListener("mouseup", function(e) {
+c.addEventListener("mouseup", function(e) {
     mouse.m[e.which - 1] = false;
     mouse.md[e.which - 1] = false;
 }, false);

@@ -9,8 +9,16 @@ function gameLoop(room) {
             for (var k = 0; len > k; k++) {
                 obj = room.o[k];
                 if (e.id == obj.id) {
-                    obj.orders.push(e);
-                    k = len + 1;
+                    if (e.type == "move" || e.type == "stop") {
+                        obj.orders.push(e);
+                        k = len + 1;
+                    } else if (e.type == "changeProperty") {
+                        console.log(e.prop);
+                        if (rtsGame.clientSafePropList.indexOf(e.prop) != -1) {
+                            obj[e.prop] = e.value;
+                        }
+                        k = len + 1;
+                    }
                 }
             }
         }

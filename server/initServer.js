@@ -6,6 +6,7 @@ var allServerData = [];
 function GameRoom() {
     this.o = [];
     this.players = [];
+    this.serverPlayerData = [];
     this.currentID = 0;
     this.incomingData = [];
     this.gameLoop = function () {
@@ -29,6 +30,10 @@ function GameRoom() {
                 i--;
             } else {
                 this.players.push(this.incomingData[i]);
+                this.serverPlayerData.push({
+                    team: this.incomingData[i].team,
+                    controlTowerCount: 0
+                });
                 this.incomingData.splice(i, 1);
                 console.log("a");
                 i--;

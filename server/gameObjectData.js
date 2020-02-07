@@ -219,6 +219,30 @@ var gameObjectParams = {
         	passive: -5
         }
     },
+    ControlTower: function () {
+        this.category = "Control";
+        this.maxEnergy = 2000;
+        this.maxHP = 800;
+        this.updateFunction = function (room) {
+            rtsGame.clearVariableDraw(this);
+            rtsGame.useEnergy(this);
+            this.variableDraw.strokes.push({
+                type: "txt",
+                x: this.x,
+                y: this.y + 44,
+                txt: this.controlTowerID
+            });
+        }
+        this.collide = {
+            rad: 20
+        };
+        this.draw = {
+            layer: 2
+        }
+        this.useEnergy = {
+            passive: 1
+        }
+    },
     Asteroid: function () {
         this.nonCombatTarget = true;
     	this.maxEnergy = 0;

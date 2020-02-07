@@ -9,3 +9,18 @@ canvas {
 body {
     overflow: hidden;
 }
+
+#select-gui-container {
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    width: 200px;
+    height: 100%;
+    z-index: 1;
+}
+
+div {
+    border: 3px solid #333333;
+    background: #FFFFFF88;
+    padding: 8px;
+}

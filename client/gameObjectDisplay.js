@@ -122,6 +122,34 @@ var draws = {
                 }
             ]
         }
+    ],
+    ControlTower: [
+        {
+            type: "path",
+            pts: [
+                {
+                    x: 0,
+                    y: 0
+                }, {
+                    x: 0,
+                    y: -35
+                }
+            ]
+        },
+        {
+            type: "arc",
+                x: 0,
+                y: -45,
+                r: 20,
+                a1: TAU / 4 - 1,
+                a2: TAU / 4 + 1
+        },
+        {
+            type: "circle",
+            x: 0,
+            y: 0,
+            r: 20
+        }
     ]
     // Asteroid: [
     // 	{

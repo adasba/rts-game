@@ -21,6 +21,18 @@ var drawUtils = {
         if (!obj.empty) ctx.fill();
         ctx.stroke();
     },
+    arc: function(ctx, obj) {
+        ctx.beginPath();
+        ctx.arc(obj.x, obj.y, obj.r, obj.a1, obj.a2);
+        ctx.stroke();
+    },
+    txt: function (ctx, obj) {
+        ctx.font = "24px Arial";
+        ctx.textAlign = "center";
+        ctx.fillStyle = this.colorScheme.stroke;
+        ctx.fillText(obj.txt, obj.x, obj.y);
+        ctx.fillStyle = this.colorScheme.fill;
+    },
     drawFunc: function (ctx, obj) {
     	obj.f(ctx);
     },
